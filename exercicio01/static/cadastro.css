@@ -1,0 +1,39 @@
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+body{
+    background-color: lightgray;
+}
+header{
+    height: 75px;
+    border: 1px solid black;
+    text-align: center;
+}
+main{
+    height: 500px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    border: 1px solid black;
+    padding: 10px;
+    width: 50%;
+    margin: auto;
+    margin-top: 20px;
+}
+section > form{
+    display: flex;
+    flex-direction: column;
+    max-width: 60%;
+    margin: auto;
+    background-color: white;
+    border: 1px solid black;
+    padding: 10px;
+}
+section > form > p{
+    margin-bottom: 5px;
+}
+section{
+    text-align: center;
+}

@@ -1,0 +1,22 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link rel="stylesheet" href="../../static/home.css">
+</head>
+<body>
+    <header>
+        <h1>Página inicial</h1>
+        <p><a href="{{ url_for('logout')}}">Logout</a></p>
+    </header>
+    <main>
+        <section>
+            <p>O atributo <strong>required</strong> é muito importante, pois inpede que sejam <br> enviadas informacoes do input, se os campos estiverem preenchidos de forma errada</p>
+            <p>O método <strong>POST</strong> é utilizado para fazer enviar os dados preenchidos no formulário</p>
+        </section>
+    </main>
+</body>
+</html>

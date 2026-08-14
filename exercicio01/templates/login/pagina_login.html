@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="../static/login.css">
+</head>
+<body>
+    <header>
+        <h1>Página de login</h1>
+    </header>
+    <main>
+        <section>
+            {% if erro%}
+              <p style="color: red; background-color: white; padding: 5px; text-align: center; margin-bottom: 5px;">{{erro}}</p>
+            {% endif %}
+            <form action="{{ url_for('entrar')}}" method="POST">
+              <p>
+               <label for="email">email: </label>
+              <input type="email" name="email" id="email">
+              </p>
+              <p>
+                <label for="senha">senha: </label>
+              <input type="password" name="senha" id="senha">
+              </p>
+             
+              <br>
+              <input type="submit" value="entrar">
+              <button><a href="/cadastro">Cadastrar</a></button>
+            </form>
+        </section>
+    </main>
+</body>
+</html>
