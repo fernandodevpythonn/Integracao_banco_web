@@ -18,7 +18,7 @@ class BancoMySql:
             )
 
             cursor = conexao.cursor()
-            cursor.execute("""SELECT COUNT(*) FROM information_schema.SCHEMATA WHERE SCHEMA_NAME = %S""",(nome_banco,))
+            cursor.execute("""SELECT COUNT(*) FROM information_schema.SCHEMATA WHERE SCHEMA_NAME = %s""",(nome_banco,))
             num_results = cursor.fetchone()[0]
 
             if num_results == 0:
@@ -42,4 +42,19 @@ class BancoMySql:
             raise
 
     
+    def executar(self,sql, parametros=None):
+        self.cursor.execute(sql,parametros or ())
+        self.conexao.commit()
+
+    def fechar(self):
+        if self.cursor:
+            self.cursor.close()
+
+        if self.conexao:
+            self.conexao.close()
     
+    def __del__(self):
+        try:
+            self.fechar()
+        except Exception:
+            pass
