@@ -8,6 +8,7 @@ load_dotenv()
 class BancoMysql:
     def __init__(self):
      nome_banco = os.getenv("DB_NAME")
+     
      try:
         conexao = mysql.connector.connect(
            host = os.getenv("DB_HOST"),
