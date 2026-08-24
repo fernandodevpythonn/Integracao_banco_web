@@ -6,6 +6,8 @@ class LoginController(BaseController):
         self.rotas = [
             ('/loginpagina','loginpagina',self.pagina_login),
             ('/cadastropagina','cadastropagina',self.pagina_cadastro),
+            ('/entrar','entrar',self.entrar,['post']),
+            ('/logout','logout',self.logout)
         ]
         super().__init__(app)
         self.usuarios = [{"email":"fernando@gmail.com","senha":"12345"}]
@@ -31,3 +33,12 @@ class LoginController(BaseController):
         else:
             erro = "usuario ou senha inválidos"
             return render_template("pagina_login.html", erro = erro)
+
+    def login(self):
+        if session.get("usuario_logado"):
+            return redirect(url_for("home"))
+        return render_template("pagina_login.html")
+    
+    def logout(self):
+        session.clear()
+        return render_template("pagina_login.html")
