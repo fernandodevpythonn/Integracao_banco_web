@@ -59,7 +59,7 @@ class LoginController(BaseController):
             "senha":senha
         })
         sucesso = "cadastro realizado com sucesso!"
-        return render_template("login/cadastro.html", sucesso = sucesso)
+        return render_template("login/pagina_login.html", sucesso = sucesso)
 
 
     def cadastro(self):
