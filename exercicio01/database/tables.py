@@ -7,6 +7,7 @@ class BancoTabelas:
     def criar_tabelas(self):
         self.criar_tabela_usuarios()
         self.criar_tabela_ratelimit()
+        self.criar_tabela_logins()
     
     def criar_tabela_usuarios(self):
         self.banco.executar("""
@@ -32,5 +33,18 @@ class BancoTabelas:
            FOREIGN KEY (usuario_id)
               REFERENCES usuarios(id)               
               ON DELETE SET NULL
+        )
+    """)
+        
+    def criar_tabela_logins(self):
+        self.banco.executar("""
+        CREATE TABLE IF NOT EXISTS logins(
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        usuario_id INT NOT NULL,
+        data_hora TIMESTAMP NOT NULL
+            DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (usuario_id)
+          REFERENCES usuarios(id)
+          ON DELETE CASCADE
         )
     """)

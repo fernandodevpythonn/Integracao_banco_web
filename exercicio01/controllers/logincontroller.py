@@ -1,5 +1,10 @@
 from flask import render_template, request, redirect,url_for,session
 from controllers.basecontroller import BaseController
+from repositories.login_repository import LoginRepository
+from services.login_service import LoginService
+from database.connection import BancoMySql
+from services.usuario_service import UsuarioService
+
 
 class LoginController(BaseController):
     def __init__(self,app):
@@ -11,8 +16,13 @@ class LoginController(BaseController):
             ('/registrar','registrar', self.registrar, ['POST'])
         ]
         super().__init__(app)
-
+        self.db = BancoMySql()
         self.usuarios = [{"email":"senac@gmail.com","senha":"12345"}]
+        self.login_repository = LoginRepository(self.db)
+
+        self.login_service = LoginService(
+            self.login_repository
+        )
 
     def pagina_login(self):
         return render_template("login/pagina_login.html")
@@ -41,6 +51,8 @@ class LoginController(BaseController):
 
         if usuario_valido:
             session["usuario_logado"] = True
+            session["usuario_id"] = usuario_valido["id"]
+            self.login_service.registrar_login(usuario_valido["id"])
             return redirect(url_for("home"))
         else:
             erro = "usuario ou senha incorretos"
