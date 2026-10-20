@@ -1,0 +1,11 @@
+header{
+    border: 1px solid black;
+    padding: 10px;
+}
+button > a{
+    text-decoration: none;
+    color: black;
+}
+body{
+    background-image: linear-gradient(to right,gray,lightgray,white);
+}

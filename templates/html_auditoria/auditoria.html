@@ -1,0 +1,264 @@
+
+
+<div class="auditoria-container">
+
+    <div class="auditoria-header">
+
+        <h1>
+            Auditoria
+            <a href="/">voltar</a>
+        </h1>
+
+        <p>
+            Registro das ações realizadas no sistema.
+        </p>
+        <a
+           <a
+        href="{{ url_for(
+            'auditoria_excel',
+            acao=acao,
+            entidade=entidade,
+            usuario_id=usuario_id
+        ) }}"
+        class="btn-excel"
+    >
+        Exportar Excel
+    </a>
+    </a>
+    <a href="{{url_for(
+        'auditoria_pdf',
+        acao=acao,
+        entidade=entidade,
+        usuario_id=usuario_id
+    )}}">
+        Exportar Pdf
+    </a>
+    </div>
+
+    <form
+        method="GET"
+        action="{{ url_for('auditoria') }}"
+        class="auditoria-filtros"
+    >
+
+        <div class="filtro-grupo">
+
+            <label for="acao">
+                Ação
+            </label>
+
+            <input
+                type="text"
+                id="acao"
+                name="acao"
+                value="{{ acao or '' }}"
+                placeholder="Ex.: LOGIN_SUCESSO"
+            >
+
+        </div>
+
+        <div class="filtro-grupo">
+
+            <label for="entidade">
+                Entidade
+            </label>
+
+            <input
+                type="text"
+                id="entidade"
+                name="entidade"
+                value="{{ entidade or '' }}"
+                placeholder="Ex.: USUARIO"
+            >
+
+        </div>
+
+        <div class="filtro-grupo">
+
+            <label for="usuario_id">
+                ID do usuário
+            </label>
+
+            <input
+                type="number"
+                id="usuario_id"
+                name="usuario_id"
+                value="{{ usuario_id or '' }}"
+                placeholder="Ex.: 1"
+            >
+
+        </div>
+
+        <div class="filtro-botoes">
+
+            <button
+                type="submit"
+                class="btn-filtrar"
+            >
+                Filtrar
+            </button>
+
+            <a
+                href="{{ url_for('auditoria') }}"
+                class="btn-limpar"
+            >
+                Limpar
+            </a>
+
+        </div>
+
+    </form>
+
+    <div class="auditoria-lista">
+
+{% for auditoria in auditorias %}
+
+    <div class="auditoria-card">
+
+        <div class="auditoria-topo">
+
+            <span class="auditoria-acao">
+
+                {% if auditoria["acao"] == "LOGIN_SUCESSO" %}
+
+                    Login realizado
+
+                {% elif auditoria["acao"] == "LOGIN_FALHA" %}
+
+                    Falha no login
+
+                {% elif auditoria["acao"] == "LOGOUT" %}
+
+                    Logout
+
+                {% elif auditoria["acao"] == "CADASTRO" %}
+
+                    Cadastro
+
+                {% elif auditoria["acao"] == "ALTERACAO" %}
+
+                    Alteração
+
+                {% elif auditoria["acao"] == "EXCLUSAO" %}
+
+                    Exclusão
+
+                {% else %}
+
+                    {{ auditoria["acao"] }}
+
+                {% endif %}
+
+            </span>
+
+
+            <span class="auditoria-data">
+
+                {{ auditoria["data_hora"].strftime("%d/%m/%Y %H:%M:%S") }}
+
+            </span>
+
+        </div>
+
+
+        <div class="auditoria-info">
+
+            <div>
+
+                <strong>
+                    ID da auditoria:
+                </strong>
+
+                {{ auditoria["id"] }}
+
+            </div>
+
+
+            <div>
+
+                <strong>
+                    Usuário responsável:
+                </strong>
+
+                {% if auditoria["usuario_id"] %}
+
+                    #{{ auditoria["usuario_id"] }}
+                    -
+                    {{ auditoria["nome"] }}
+
+                {% else %}
+
+                    Não identificado
+
+                {% endif %}
+
+            </div>
+
+
+            <div>
+
+                <strong>
+                    Entidade:
+                </strong>
+
+                {{ auditoria["entidade"] }}
+
+                {% if auditoria["entidade_id"] %}
+
+                    #{{ auditoria["entidade_id"] }}
+
+                {% endif %}
+
+            </div>
+
+
+            <div>
+
+                <strong>
+                    IP:
+                </strong>
+
+                {{ auditoria["ip"] or "Não informado" }}
+
+            </div>
+
+        </div>
+
+
+        {% if auditoria["descricao"] %}
+
+            <div class="auditoria-descricao">
+
+                <strong>
+                    Descrição
+                </strong>
+
+                <p>
+                    {{ auditoria["descricao"] }}
+                </p>
+
+            </div>
+
+        {% endif %}
+
+    </div>
+
+{% else %}
+
+    <div class="auditoria-vazia">
+
+        <h2>
+            Nenhum registro encontrado
+        </h2>
+
+        <p>
+            Não existem registros de auditoria para os filtros informados.
+        </p>
+
+    </div>
+
+{% endfor %}
+    </div>
+
+</div>
+

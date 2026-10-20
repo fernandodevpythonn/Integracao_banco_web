@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>usuários</title>
+    <link rel="stylesheet" href="../../static/css/global.css">
+    <link rel="stylesheet" href="../../static/css/usuarios.css">
+</head>
+<body>
+    <header>
+        <h1>usuarios <a href="/">voltar</a></h1>
+
+    </header>
+
+        <a href="{{url_for('cadastrar_usuario')}}" class="button">+ Novo usuario</a>
+    <div class="usuarios_grid">
+        {%for usuario in usuarios %}
+
+         <div class="usuario_card">
+            <div class="usuario_avatar">
+                {{usuario[1][0] | upper}}
+            </div>
+            <p>
+              <h2>{{usuario[1]}}</h2> 
+                <span>
+                  {% if usuario[3] == 'administrador'%}
+                    administrador
+                  {% else %}
+                    usuario
+                  {% endif %}
+
+                </span>
+                <div class="edit_exc">
+                  {% if usuario[0] != session.get('usuario_id') %}
+                  <form action="{{ url_for('excluir_usuario',usuario_id=usuario[0])}}" 
+                  method="POST">
+                              <button
+                                  type="submit"
+                              >
+                                  Excluir
+                              </button>
+                          </form>
+                  {% endif %}
+                  <form action="" method="POST">
+                  <button type="submit">
+                    Editar
+                  </button>
+                  </form>
+                </div>
+                 
+                
+                
+              
+            </p>
+           
+         </div>
+      {% endfor %}
+    </div>
+</body>
+</html>

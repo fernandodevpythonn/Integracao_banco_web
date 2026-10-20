@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="../static/login.css">
+    <link rel="stylesheet" href="../static/global.css">
+
+</head>
+<body>
+    <header>
+        <h1>Página de login</h1>
+    </header>
+    <main>
+        <form action="{{('entrar')}}" method="post">
+            <fieldset>Login</fieldset>
+            <p>
+                <label for="email">Email:</label>
+                <input type="email" name="email" id="email" required>
+            </p>
+            <p>
+                <label for="senha">Senha:</label>
+                <input type="password" name="senha" id="senha" required>
+            </p>
+            <p>
+                <input type="submit" value="Entrar">
+                <button><a href="/cadastro">Cadastrar</a></button>
+            </p>
+        </form>
+    </main>
+</body>
+</html>

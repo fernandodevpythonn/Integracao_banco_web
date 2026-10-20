@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastrar</title>
+</head>
+<body>
+    <header>
+        <h1>cadastre um novo usuário no sistema</h1>
+    </header>
+
+   
+        {% if erro %}
+         <div class="erro">
+            {{erro}}
+         </div>
+        {% endif %}
+
+        <form action="{{ url_for('cadastrar_usuario') }}" method="POST">
+            <p>
+            <label for="nome">Nome: </label>
+            <input type="text" id="nome" name="nome" value="{{dados.usuario if dados else ''}}" required>
+            </p>
+            <p>
+                <label for="perfil">Perfil: </label>
+                <select name="perfil" id="perfil" required>
+                    <option value="">
+                        selecione um perfil
+                    </option>
+                    <option value="usuario">
+                        usuario
+                    </option>
+                    <option value="administrador">
+                        administrador
+                    </option>
+                </select>
+            </p>
+            <p>
+                <label for="senha">Senha: </label>
+                <input type="password" name="senha" id="senha" required>
+            </p>
+            <p>
+                <label for="confirmar_senha">Confirmar senha</label>
+                <input type="password" id="confirmar_senha" name="confirmar_senha" required>
+            </p>
+            <input type="submit" value="cadastrar">
+        </form>
+</body>
+</html>
