@@ -4,12 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cadastrar</title>
+    <link rel="stylesheet" href="../../static/css/cadastrar.css">
+    <link rel="stylesheet" href="../../static/css/global.css">
 </head>
 <body>
-    <header>
-        <h1>cadastre um novo usuário no sistema</h1>
-    </header>
-
+    {%extends "base.html"%}
+    {%block name%}Cadastre um novo usuário{%endblock%}
+    {%block content%}
    
         {% if erro %}
          <div class="erro">
@@ -44,7 +45,12 @@
                 <label for="confirmar_senha">Confirmar senha</label>
                 <input type="password" id="confirmar_senha" name="confirmar_senha" required>
             </p>
-            <input type="submit" value="cadastrar">
+            <p>
+                <input type="submit" value="cadastrar">
+            <button type="submit"><a href="/usuarios">Cancelar</a></button>
+            </p>
+            
         </form>
+        {%endblock%}
 </body>
 </html>

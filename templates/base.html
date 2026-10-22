@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{%block title%}sistema{%endblock%}</title>
+  <link rel="stylesheet" href="{{url_for('static',filename='css/base.css')}}">
+  <link rel="stylesheet" href="{{url_for('static',filename='css/global.css')}}">
+</head>
+<body>
+  
+  <header>
+    <h1>{%block name%}{%endblock%}</h1>
+    <ul>
+      <li><a href="/">Home</a></li>
+      <div class="dropdown">
+        <p class="dropdown-btn">Lista 01</p>
+        <div class="dropdown-content">
+          <a href="#">Exercicio 01</a>
+        </div>
+      </div>
+      <div class="dropdown">
+        <p class="dropdown-btn">Lista 02</p>
+      </div>
+      <div class="dropdown">
+        <p class="dropdown-btn">Lista 03</p>
+        <div class="dropdown-content">
+          <a href="#">Exercicio 01</a>
+          <a href="#">Exercicio 02</a>
+          <a href="#">Exercicio 03</a>
+          <a href="#">Exercicio 04</a>
+        </div>
+      </div>
+        <div class="dropdown">
+         <p class="dropdown-btn">Administração</p>
+         <div class="dropdown-content">
+          <a href="{{url_for('usuarios')}}">Usuários</a>
+          <a href="{{url_for('auditoria')}}">Auditoria</a>
+         </div>   
+        </div>
+    <div class="dropdown">
+      <div class="dropdown-btn">Perfil</div>
+      <div class="dropdown-content">
+        <a href="">Editar perfil</a>
+      </div>
+    </div>
+    <li><a href="/logout">Logout</a></li>
+    </ul>
+    
+  </header>
+  {%block content%}{%endblock%}
+</body>
+</html>

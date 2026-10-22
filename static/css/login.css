@@ -4,7 +4,7 @@
     box-sizing: border-box;
 }
 body{
-    background-color: beige;
+    background-color: rgb(0, 0, 0);
     width: 100vw;
     height: 100vh;
     display: flex;
@@ -13,7 +13,7 @@ body{
     align-items: center;
 }
 header{
-    background-color: lightgray;
+    background-color: yellow;
     padding: 10px;
     position: absolute;
     width: 100vw;
@@ -29,6 +29,7 @@ form{
     width: 500px;
     height: 400px;
     padding: 15px;
+    border-radius: 10px;
     background-color: white;
     display: flex;
     flex-direction: column;
@@ -40,4 +41,9 @@ form > p{
 button > a{
     text-decoration: none;
     color: black;
+}
+input[type="submit"]{
+    padding: 10px;
+    border-radius: 10px;
+    cursor: pointer;
 }

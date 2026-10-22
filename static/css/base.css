@@ -1,0 +1,53 @@
+header{
+  width: 100vw;
+  background-color: yellow;
+  padding: 20px;
+}
+
+header > ul{
+  margin-top: 20px;
+  display: flex;
+  width: 100vw;
+  justify-content: space-around;
+}
+header > ul > li{
+  list-style-type: none;
+}
+a{
+  text-decoration: none;
+  color: black;
+}
+.dropdown{
+  position: relative;
+  display: inline-block;
+  color: black;
+}
+.dropdown-btn{
+  cursor: pointer;
+  display: inline-block;
+  border: none;
+  transition: background-color 0.3s ease;
+  color: black;
+}
+
+.dropdown-content{
+  display: none;
+  position: absolute;
+  background-color: white;
+  color: black;
+  z-index: 1;
+  white-space: nowrap;
+  border-radius: 4px;
+  border: 1px solid black;
+}
+.dropdown:hover .dropdown-content{
+  display:flex;
+  flex-direction: column;
+  padding: 5px;
+  color: black;
+}
+
+.dropdown-content > a{
+  margin-top: 10px;
+  color: black;
+}

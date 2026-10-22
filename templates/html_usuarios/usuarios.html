@@ -8,11 +8,10 @@
     <link rel="stylesheet" href="../../static/css/usuarios.css">
 </head>
 <body>
-    <header>
-        <h1>usuarios <a href="/">voltar</a></h1>
-
+    {%extends "base.html"%}
+    {%block name%}Usuários{%endblock%}
+    {%block content%}
     </header>
-
         <a href="{{url_for('cadastrar_usuario')}}" class="button">+ Novo usuario</a>
     <div class="usuarios_grid">
         {%for usuario in usuarios %}
@@ -33,6 +32,7 @@
                 </span>
                 <div class="edit_exc">
                   {% if usuario[0] != session.get('usuario_id') %}
+               
                   <form action="{{ url_for('excluir_usuario',usuario_id=usuario[0])}}" 
                   method="POST">
                               <button
@@ -42,20 +42,17 @@
                               </button>
                           </form>
                   {% endif %}
-                  <form action="" method="POST">
+                  <form action="{{url_for('editar_usuario',usuario_id=usuario[0])}}" method="POST">
                   <button type="submit">
                     Editar
                   </button>
                   </form>
                 </div>
-                 
-                
-                
-              
             </p>
            
          </div>
       {% endfor %}
     </div>
+    {%endblock%}
 </body>
 </html>

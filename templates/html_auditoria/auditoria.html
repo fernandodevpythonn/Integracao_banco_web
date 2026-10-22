@@ -1,18 +1,14 @@
 
-
+{%extends "base.html"%}
+{%block content%}
+{%block name%}Auditoria{%endblock%}
+<link rel="stylesheet" href="../../static/css/auditoria.css">
+<link rel="stylesheet" href="../../static/css/global.css">
 <div class="auditoria-container">
 
-    <div class="auditoria-header">
-
-        <h1>
-            Auditoria
-            <a href="/">voltar</a>
-        </h1>
-
-        <p>
-            Registro das ações realizadas no sistema.
-        </p>
-        <a
+    
+    <p class="btn-container">
+         <a
            <a
         href="{{ url_for(
             'auditoria_excel',
@@ -30,21 +26,21 @@
         acao=acao,
         entidade=entidade,
         usuario_id=usuario_id
-    )}}">
+    )}}" class="btn-pdf">
+    
         Exportar Pdf
     </a>
-    </div>
-
-    <form
+    </p>
+       
+        
+     <form
         method="GET"
         action="{{ url_for('auditoria') }}"
         class="auditoria-filtros"
-    >
-
-        <div class="filtro-grupo">
-
+     >
+           <p>
             <label for="acao">
-                Ação
+                Ação:
             </label>
 
             <input
@@ -54,13 +50,10 @@
                 value="{{ acao or '' }}"
                 placeholder="Ex.: LOGIN_SUCESSO"
             >
-
-        </div>
-
-        <div class="filtro-grupo">
-
-            <label for="entidade">
-                Entidade
+           </p>
+            <p>
+                 <label for="entidade">
+                Entidade:
             </label>
 
             <input
@@ -70,13 +63,10 @@
                 value="{{ entidade or '' }}"
                 placeholder="Ex.: USUARIO"
             >
-
-        </div>
-
-        <div class="filtro-grupo">
-
-            <label for="usuario_id">
-                ID do usuário
+            </p>
+            <p>
+                 <label for="usuario_id">
+                ID do usuário:
             </label>
 
             <input
@@ -86,9 +76,7 @@
                 value="{{ usuario_id or '' }}"
                 placeholder="Ex.: 1"
             >
-
-        </div>
-
+            </p>
         <div class="filtro-botoes">
 
             <button
@@ -106,6 +94,7 @@
             </a>
 
         </div>
+
 
     </form>
 
@@ -262,3 +251,4 @@
 
 </div>
 
+{% endblock %}

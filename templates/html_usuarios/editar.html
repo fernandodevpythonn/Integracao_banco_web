@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página editar</title>
+    <link rel="stylesheet" href="../../static/css/editar.css">
+    <link rel="stylesheet" href="../../static/css/global.css">
+</head>
+<body>
+    {%extends "base.html"%}
+    {%block name%}Editar usuário{%endblock%}
+    {%block content%}
+    <form
+    class="usuario-form"
+    action="{{ url_for(
+        'editar_usuario',
+        usuario_id=usuario[0]
+    ) }}"
+    method="POST"
+    enctype="multipart/form-data"
+>
+
+    <label for="usuario">
+        Usuário:
+    </label>
+
+    <input
+        type="text"
+        id="nome"
+        name="nome"
+        value="{{ usuario[1] }}"
+        required
+    >
+
+
+    <label for="perfil">
+        Perfil:
+    </label>
+
+    <select
+        id="perfil"
+        name="perfil"
+        required
+    >
+
+        <option
+            value="usuario"
+            {% if usuario[3] == "usuario" %}
+                selected
+            {% endif %}
+        >
+            Usuário
+        </option>
+
+
+        <option
+            value="administrador"
+            {% if usuario[3] == "administrador" %}
+                selected
+            {% endif %}
+        >
+            Administrador
+        </option>
+
+    </select>
+
+
+    <label for="senha">
+        Nova senha:
+    </label>
+
+    <input
+        type="password"
+        id="senha"
+        name="senha"
+    >
+
+
+    <label for="confirmar_senha">
+        Confirmar nova senha:
+    </label>
+
+    <input
+        type="password"
+        id="confirmar_senha"
+        name="confirmar_senha">
+
+<form
+    class="usuario-form"
+    action="{{ url_for(
+        'editar_usuario',
+        usuario_id=usuario[0]
+    ) }}"
+    method="POST"
+    enctype="multipart/form-data"
+>
+
+
+
+    <div class="usuario-botoes">
+
+        <button type="submit"  class="btn-salvar">
+            Salvar alterações
+        </button>
+
+       <button type="submit"><a href="{{ url_for('usuarios') }}" class="btn-cancelar">
+            Cancelar
+        </a></button>
+        
+
+    </div>
+
+
+</form>
+</body>
+{%endblock%}
+</html>

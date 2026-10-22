@@ -83,3 +83,36 @@ class UsuarioRepository:
             WHERE id = %s
             """,(usuario_id,)
         )
+    def atualizar(self,usuario_id,nome,perfil,senha_hash=None):
+        if senha_hash:
+            self.db.executar(
+                """
+                UPDATE usuarios
+                SET
+                  nome = %s,
+                  senha = %s,
+                  perfil = %s
+                WHERE id = %s
+                """,
+                (
+                    nome,
+                    senha_hash,
+                    perfil,
+                    usuario_id
+                )
+            )
+        else:
+            self.db.executar(
+                """
+                UPDATE usuarios
+                SET
+                   nome = %s,
+                   perfil = %s
+                WHERE id = %s
+                """,
+                (
+                    nome,
+                    perfil,
+                    usuario_id
+                )
+            )

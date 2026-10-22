@@ -10,6 +10,9 @@ from security.waf import configurar_waf
 
 import os
 from flask import Flask
+
+
+
 banco = BancoMysql()
 tabelas = BancoTabelas(banco)
 tabelas.criar_tabelas()
