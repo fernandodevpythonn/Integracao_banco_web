@@ -16,7 +16,7 @@ body{
 }
 
 .usuario_avatar{
-    border: 1px solid black;
+    border: 1px solid rgb(255, 255, 255);
     border-radius: 70%;
     width: 70px;
     height: 70px;
@@ -52,7 +52,7 @@ h2{
     margin-top: 20px;
 }
 .usuario_card{
-    border: 1px solid black;
+    border: 1px solid rgb(255, 255, 255);
     border-radius: 10px;
     padding: 10px;
     display: flex;

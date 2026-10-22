@@ -44,7 +44,7 @@ class BancoTabelas:
         )
 
         if not resultado:
-            senha_hash = bcrypt.hashpw("12345".encode(),bcrypt.gensalt()).decode()
+            senha_hash = bcrypt.hashpw("Fernando@123".encode(),bcrypt.gensalt()).decode()
 
             self.banco.executar(
                 """
