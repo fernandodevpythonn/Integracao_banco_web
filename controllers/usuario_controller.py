@@ -1,4 +1,4 @@
-from flask import render_template, request, redirect, url_for, session
+from flask import render_template, request, redirect, url_for, session, Response
 
 from controllers.base_controller import BaseController
 
@@ -8,6 +8,9 @@ from repositories.usuario_repository import UsuarioRepository
 from services.usuario_service import UsuarioService
 from repositories.auditoria_repository import AuditoriaRepository
 from services.auditoria_service import AuditoriaService
+from services.imagem_service import ImagemService
+
+import base64
 
 class UsuarioController(BaseController):
     def __init__(self,app):
@@ -17,7 +20,8 @@ class UsuarioController(BaseController):
             ('/usuarios/editar/<int:usuario_id>','editar_usuario',self.atualizar,['GET','POST'],'administrador'),
             ('/usuarios/excluir/<int:usuario_id>','excluir_usuario',self.excluir,['POST'],'administrador'),
             ('/usuarios/excluir/<int:usuario_id>','confirmar_exclusao_usuario',self.confirmar_exclusao,['GET'],'administrador'),
-            ('/perfil','perfil',self.editar_perfil,['GET','POST'],'autenticado')
+            ('/perfil','perfil',self.editar_perfil,['GET','POST'],'autenticado'),
+            ('/perfil/imagem','imagem_perfil', self.proteger_rota(self.imagem_perfil),['GET'],'autenticado'),
 
         ]
 
@@ -28,7 +32,7 @@ class UsuarioController(BaseController):
         self.usuario_service = UsuarioService(self.repository_usuario)
         self.auditoria_repository = AuditoriaRepository(self.db)
         self.auditoria_service = AuditoriaService(self.auditoria_repository)
-
+        self.imagem_service = ImagemService()
     def listar(self):
             usuarios = self.usuario_service.listar_todos()
             return render_template("html_usuarios/usuarios.html", usuarios=usuarios)
@@ -121,6 +125,7 @@ class UsuarioController(BaseController):
              perfil = request.form.get("perfil")
              senha = request.form.get("senha")
              confirmar_senha = request.form.get("confirmar_senha")
+             imagem = request.files.get("imagem")
              if (
                  not nome_usuario or not perfil or not senha
              ):
@@ -134,13 +139,19 @@ class UsuarioController(BaseController):
                      usuario=usuario,
                      erro = "as senhas não coincidem"
                  )
-             self.usuario_service.atualizar(
-                 usuario_id=usuario_id,
-                 nome=nome_usuario,
-                 perfil=perfil,
-                 senha=senha
+             try:
+                 dados_imagem = None
+                 if imagem and imagem.filename:
+                    dados_imagem = self.imagem_service.validar(imagem)
+                 self.usuario_service.atualizar(
+                  usuario_id=usuario_id,
+                  nome=nome_usuario,
+                  perfil=perfil,
+                  senha=senha,
+                  imagem=dados_imagem
              )
-
+             except ValueError as e:
+                 return render_template("html_usuarios/editar.html",usuario=usuario,erro=str(e))
              return  redirect(url_for("usuarios"))
          return render_template(
              "html_usuarios/editar.html",usuario=usuario
@@ -157,4 +168,175 @@ class UsuarioController(BaseController):
     def confirmar_exclusao(self):
          pass
     def editar_perfil(self):
-         pass
+        usuario_id = session.get("usuario_id")
+        usuario = self.usuario_service.buscar_por_id(
+            usuario_id
+        )
+
+
+        if not usuario:
+
+            return "Usuário não encontrado", 404
+
+
+        if request.method == "POST":
+
+            nome_usuario = request.form.get("usuario")
+
+            data_nascimento = request.form.get(
+                "nascimento"
+            )
+
+            senha = request.form.get("senha")
+
+            confirmar_senha = request.form.get(
+                "confirmar_senha"
+            )
+
+
+            if not nome_usuario or not data_nascimento:
+
+                return render_template(
+                    "html_usuarios/editar_perfil.html",
+                    usuario=usuario,
+                    erro="Preencha todos os campos."
+                )
+
+
+            if senha or confirmar_senha:
+
+                if senha != confirmar_senha:
+
+                    return render_template(
+                        "html_usuarios/editar_perfil.html",
+                        usuario=usuario,
+                        erro="As senhas não coincidem."
+                    )
+            # 06/10/2026
+            imagem = request.files.get("imagem")
+           
+            try:
+                dados_imagem = None
+
+                if imagem and imagem.filename:
+
+                    dados_imagem = self.imagem_service.validar(imagem)
+
+                self.usuario_service.atualizar_perfil(
+
+                    usuario_id=usuario_id,
+
+                    usuario=nome_usuario,
+
+                    data_nascimento=data_nascimento,
+
+                    senha=senha,
+                    #06/10/2026
+                    imagem=dados_imagem
+                    
+                )
+
+
+                alteracoes = []
+
+
+                if usuario[1] != nome_usuario:
+
+                    alteracoes.append(
+                        f"Usuário alterado de "
+                        f"'{usuario[1]}' para "
+                        f"'{nome_usuario}'"
+                    )
+
+
+                if str(usuario[2]) != str(data_nascimento):
+
+                    alteracoes.append(
+                        f"Data de nascimento alterada de "
+                        f"'{usuario[2]}' para "
+                        f"'{data_nascimento}'"
+                    )
+
+
+                if senha:
+
+                    alteracoes.append(
+                        "Senha alterada"
+                    )
+
+                #06/10/2026
+                if dados_imagem:
+                    alteracoes.append(f"Imagem alterada para '{dados_imagem['nome']}'")
+               
+                if alteracoes:
+
+                    descricao = "; ".join(
+                        alteracoes
+                    )
+
+
+                    self.auditoria_service.registrar(
+
+                        usuario_id=session.get(
+                            "usuario_id"
+                        ),
+
+                        acao="ALTERACAO",
+
+                        entidade="USUARIO",
+
+                        entidade_id=usuario_id,
+
+                        descricao=descricao,
+
+                        ip=request.remote_addr
+                    )
+
+
+            except ValueError as e:
+
+                return render_template(
+                    "html_usuarios/editar_perfil.html",
+                    usuario=usuario,
+                   
+                    erro=str(e)
+                )
+
+
+            return redirect("/")
+
+        usuario = list(usuario)
+        usuario[2] = usuario[2].strftime("%Y-%m-%d")
+        return render_template("html_usuarios/editar_perfil.html", usuario=usuario,)
+    def imagem_perfil(self):
+        usuario_id = session.get("usuario_id")
+
+        if not usuario_id:
+            return "usuario não autenticado", 401
+        
+        imagem = self.usuario_service.buscar_imagem(
+            usuario_id
+        )
+
+        if not imagem:
+            return "imagem não encontrada", 404
+        
+        nome = imagem[0]
+        tipo = imagem[1]
+        dados_base64 = imagem[2]
+
+        try:
+            dados = base64.b64decode(
+                dados_base64
+            )
+        except Exception:
+            return "imagem inválida", 500
+        
+        return Response(
+            dados,
+            mimetype = tipo,
+            headers={
+                "content-Disposition":
+                f'inline; filename="{nome}"'
+            }
+        )

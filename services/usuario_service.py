@@ -94,7 +94,7 @@ class UsuarioService:
     def buscar_por_id(self,usuario_id):
          return self.repository.buscar_por_id(usuario_id)
 
-    def atualizar(self,usuario_id,nome,perfil,senha=None):
+    def atualizar(self,usuario_id,nome,perfil,senha=None,imagem=None):
         senha_hash = None
 
         if senha:
@@ -106,3 +106,10 @@ class UsuarioService:
             perfil = perfil,
             senha_hash = senha_hash,
         )
+
+        if imagem:
+            self.repository.salvar_imagem(
+                usuario_id=usuario_id,
+                imagem=imagem
+            )
+    

@@ -116,3 +116,52 @@ class UsuarioRepository:
                     usuario_id
                 )
             )
+    def salvar_imagem(self,usuario_id,imagem):
+        self.db.executar(
+            """
+            INSERT INTO imagens
+            (
+              usuario_id,
+              nome,
+              tipo,
+              formato,
+              tamanho_original,
+              dados
+            )
+            VALUES
+            (
+              %s,
+              %s,
+              %s,
+              %s,
+              %s,
+              %s
+            )
+            ON DUPLICATE KEY UPDATE
+              nome = VALUES(nome),
+              tipo = VALUES(tipo),
+              formato = VALUES(formato),
+              tamanho_original = VALUES(tamanho_original),
+              dados = VALUES(dados),
+              data_hora = CURRENT_TIMESTAMP
+            """,
+            (
+                usuario_id,
+                imagem["nome"],
+                imagem["tipo"],
+                imagem["formato"],
+                imagem["tamanho_original"],
+                imagem["dados"]
+            )
+        )
+    def buscar_imagem(self,usuario_id):
+        return self.db.consultar_um(
+            """
+            SELECT
+              nome,
+              tipo,
+              dados
+            FROM imagens
+            WHERE usuario_id = %s
+            """,(usuario_id,)
+        )

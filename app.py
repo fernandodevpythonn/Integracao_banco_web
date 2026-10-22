@@ -8,6 +8,7 @@ from controllers.auditoria_controller import AuditoriaController
 from controllers.usuario_controller import UsuarioController
 from security.waf import configurar_waf
 
+
 import os
 from flask import Flask
 

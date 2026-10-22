@@ -9,6 +9,7 @@ class BancoTabelas:
         self.criar_tabela_auditoria()
         self.usuario_admin()
         self.criar_tabela_logins()
+        self.criar_tabela_imagens()
 
     def criar_tabela_usuarios(self):
         self.banco.executar("""
@@ -80,3 +81,29 @@ class BancoTabelas:
           )
     
     """)
+        
+    def criar_tabela_imagens(self):
+        self.banco.executar("""
+           CREATE TABLE IF NOT EXISTS imagens(
+                id INT NOT NULL AUTO_INCREMENT,
+                usuario_id INT NOT NULL,
+                nome VARCHAR(255) NOT NULL,
+                tipo VARCHAR(50) NOT NULL,
+                formato VARCHAR(10) NOT NULL,
+                tamanho_original INT NOT NULL,
+                dados LONGTEXT NOT NULL,
+                data_hora DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+                PRIMARY KEY (id),
+
+                UNIQUE KEY usuario_imagem (usuario_id),
+
+                CONSTRAINT imagens_ibfk_1
+                    FOREIGN KEY (usuario_id)
+                    REFERENCES usuarios(id)
+                    ON DELETE CASCADE
+            ) ENGINE=InnoDB
+            DEFAULT CHARSET=utf8mb4
+            COLLATE=utf8mb4_general_ci;              
+           
+        """)
