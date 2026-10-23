@@ -22,7 +22,7 @@ class UsuarioController(BaseController):
             ('/usuarios/excluir/<int:usuario_id>','confirmar_exclusao_usuario',self.confirmar_exclusao,['GET'],'administrador'),
             ('/perfil','perfil',self.editar_perfil,['GET','POST'],'autenticado'),
             ('/perfil/imagem','imagem_perfil', self.proteger_rota(self.imagem_perfil),['GET'],'autenticado'),
-
+            ('/usuarios/<int:usuario_id>/imagem','imagem_usuario',self.proteger_rota(self.imagem_usuario),['GET'], 'administrador')
         ]
 
         super().__init__(app)
@@ -181,11 +181,7 @@ class UsuarioController(BaseController):
 
         if request.method == "POST":
 
-            nome_usuario = request.form.get("usuario")
-
-            data_nascimento = request.form.get(
-                "nascimento"
-            )
+            nome_usuario = request.form.get("nome")
 
             senha = request.form.get("senha")
 
@@ -194,7 +190,7 @@ class UsuarioController(BaseController):
             )
 
 
-            if not nome_usuario or not data_nascimento:
+            if not nome_usuario:
 
                 return render_template(
                     "html_usuarios/editar_perfil.html",
@@ -223,13 +219,8 @@ class UsuarioController(BaseController):
                     dados_imagem = self.imagem_service.validar(imagem)
 
                 self.usuario_service.atualizar_perfil(
-
                     usuario_id=usuario_id,
-
                     usuario=nome_usuario,
-
-                    data_nascimento=data_nascimento,
-
                     senha=senha,
                     #06/10/2026
                     imagem=dados_imagem
@@ -246,15 +237,6 @@ class UsuarioController(BaseController):
                         f"Usuário alterado de "
                         f"'{usuario[1]}' para "
                         f"'{nome_usuario}'"
-                    )
-
-
-                if str(usuario[2]) != str(data_nascimento):
-
-                    alteracoes.append(
-                        f"Data de nascimento alterada de "
-                        f"'{usuario[2]}' para "
-                        f"'{data_nascimento}'"
                     )
 
 
@@ -337,6 +319,34 @@ class UsuarioController(BaseController):
             mimetype = tipo,
             headers={
                 "content-Disposition":
-                f'inline; filename="{nome}"'
+                 f'inline; filename="{nome}"'
+            }
+        )
+    def imagem_usuario(self,usuario_id):
+        imagem = self.usuario_service.buscar_imagem(usuario_id)
+
+        if not imagem:
+            return "imagem não encontrada", 404
+        
+        nome = imagem[0]
+        tipo = imagem[1]
+        dados_base64 = imagem[2]
+
+        if not dados_base64:
+            return "imagem não encontrada", 404
+        
+        try:
+            if isinstance(dados_base64, str): dados = base64.b64decode(dados_base64, validate=True)
+            else:
+                dados = dados_base64
+        except Exception:
+            return "imagem inválida", 500
+        
+        return Response(
+            dados,
+            mimetype=tipo,
+            headers={
+                "content-disposition":
+                 f'inline; filename="{nome}"'
             }
         )

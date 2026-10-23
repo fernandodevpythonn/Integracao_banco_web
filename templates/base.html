@@ -13,8 +13,16 @@
    
       <h1>{%block name%}{%endblock%}</h1>
       
+    
     <ul>
-
+      <li>
+        <a href="{{ url_for('perfil') }}" class="avatar-link">
+          <img
+              src="{{ url_for('imagem_perfil') }}"
+              
+              class="avatar-usuario">
+      </a>
+      </li>
       <li><a href="/">Home</a></li>
       <div class="dropdown">
         <p class="dropdown-btn">Lista 01</p>

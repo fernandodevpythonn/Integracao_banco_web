@@ -112,4 +112,5 @@ class UsuarioService:
                 usuario_id=usuario_id,
                 imagem=imagem
             )
-    
+    def buscar_imagem(self,usuario_id):
+        return self.repository.buscar_imagem(usuario_id)
